@@ -1,4 +1,6 @@
 from setteing import *
+from sprites import *
+from groups import AllSprites
 
 class Game():
     def __init__(self):
@@ -9,8 +11,25 @@ class Game():
         self.running = True
 
         #groups
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
+
+
+        #setup
+        self.setup()
+
+    def setup(self):
+        map = load_pygame(join('data','maps','world.tmx'))
+        for x,y,image in map.get_layer_by_name('Main').tiles():
+            Sprites((x * TILE_SIZE, y * TILE_SIZE),image,(self.all_sprites,self.collision_sprites))
+        
+        for x,y,image in map.get_layer_by_name('Decoration').tiles():
+            Sprites((x * TILE_SIZE,y * TILE_SIZE),image,self.all_sprites)
+
+        for obj in map.get_layer_by_name('Entities'):
+            if obj.name == 'Player':
+                self.player = Player((obj.x,obj.y),self.collision_sprites,self.all_sprites)
+            
 
     def run(self):
         while self.running:
@@ -25,7 +44,7 @@ class Game():
 
             #draw
             self.display_surface.fill(BG_COLOGR)
-            self.all_sprites.draw(self.display_surface)
+            self.all_sprites.draw(self.player.rect.center)
             pygame.display.update()
         pygame.quit()
 
