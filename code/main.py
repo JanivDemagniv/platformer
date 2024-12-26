@@ -15,7 +15,7 @@ class Game():
         self.collision_sprites = pygame.sprite.Group()
 
 
-        #setup
+        #load game
         self.setup()
 
     def setup(self):
