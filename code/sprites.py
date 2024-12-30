@@ -7,11 +7,21 @@ class Sprites(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(topleft=pos)
         self.ground = True
 
-class Player(Sprites):
-    def __init__(self,pos,collisions, *groups):
-        self.image = pygame.image.load(join('images','player','0.png')).convert_alpha()
-        super().__init__(pos,self.image,*groups)
-        self.rect = self.image.get_frect(center=pos)
+class AnimatedSprites(Sprites):
+    def __init__(self, pos, frames, groups):
+        self.frames,self.frame_index,self.animation_speed = frames,0,10
+        super().__init__(pos, self.frames[int(self.frame_index)], groups)
+    
+    def animate(self,dt):
+        self.frame_index += self.animation_speed * dt
+        self.image = self.frames[int(self.frame_index) % len(self.frames)]
+
+class Player(AnimatedSprites):
+    def __init__(self,pos,frames,collisions, *groups):
+        super().__init__(pos,frames,*groups)
+        
+        self.flip = False
+
         self.direction = pygame.Vector2()
         self.speed = 400
         self.collisions_sprites = collisions
@@ -50,7 +60,19 @@ class Player(Sprites):
         level_rects = [sprite.rect for sprite in self.collisions_sprites]
         self.on_floor = True if bottom_rect.collidelist(level_rects) >= 0 else False
 
+    def animate(self, dt):
+        if self.direction.x:
+            self.frame_index += self.animation_speed * dt
+            self.flip = self.direction.x < 0 
+        else:
+            self.frame_index = 0
+
+        self.frame_index = 1 if not self.on_floor else self.frame_index
+        self.image = self.frames[int(self.frame_index) % len(self.frames)]
+        self.image = pygame.transform.flip(self.image,self.flip,False)
+
     def update(self, dt):
         self.check_floor()
         self.input()
         self.move(dt)
+        self.animate(dt)
