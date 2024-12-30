@@ -76,3 +76,17 @@ class Player(AnimatedSprites):
         self.input()
         self.move(dt)
         self.animate(dt)
+
+class Bee(AnimatedSprites):
+    def __init__(self, pos, frames, groups):
+        super().__init__(pos, frames, groups)
+
+    def update(self, dt):
+        self.animate(dt)
+
+class Worm(AnimatedSprites):
+    def __init__(self, pos, frames, groups):
+        super().__init__(pos, frames, groups)
+
+    def update(self, dt):
+        self.animate(dt)

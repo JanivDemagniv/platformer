@@ -26,6 +26,7 @@ class Game():
         self.fire_surf = import_image('images','gun','fire')
         self.bee_frames = import_folder('images','enemies','bee')
         self.worm_frames = import_folder('images','enemies','worm')
+        self.background_music = import_sound('audio','music')
 
     def setup(self):
         map = load_pygame(join('data','maps','world.tmx'))
@@ -38,8 +39,13 @@ class Game():
         for obj in map.get_layer_by_name('Entities'):
             if obj.name == 'Player':
                 self.player = Player((obj.x,obj.y),self.player_frames,self.collision_sprites,self.all_sprites)
+            if obj.name == 'Bee':
+                Bee((obj.x,obj.y),self.bee_frames,self.all_sprites)
+            if obj.name == 'Worm':
+                Worm((obj.x,obj.y),self.worm_frames,self.all_sprites)
 
     def run(self):
+        self.background_music.play()
         while self.running:
             dt = self.clock.tick(FRAMERATE) / 1000
 
