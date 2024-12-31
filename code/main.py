@@ -17,6 +17,7 @@ class Game():
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
         self.bullet_sprites = pygame.sprite.Group()
+        self.enemy_sprites = pygame.sprite.Group()
 
 
         #load game
@@ -27,7 +28,11 @@ class Game():
         self.bee_timer = Timer(500,func = self.create_bee,repeat = True,autoStart = True)
     
     def create_bee(self):
-        Bee((randint(300,600),randint(300,600)),self.bee_frames,self.all_sprites)
+        Bee(
+            pos= (self.level_width + WINDOW_WIDTH,randint(0,self.level_height)),
+            frames= self.bee_frames,
+            groups= (self.all_sprites,self.enemy_sprites),
+            speed= randint(300,500))
 
     def create_bullet(self,pos,direction):
         self.audio['shoot'].play()
@@ -46,10 +51,12 @@ class Game():
 
         #audio
         self.audio = import_sound('audio')
-        self.audio['music'].play()
 
     def setup(self):
         map = load_pygame(join('data','maps','world.tmx'))
+        self.level_width = map.width * TILE_SIZE
+        self.level_height = map.height * TILE_SIZE
+
         for x,y,image in map.get_layer_by_name('Main').tiles():
             Sprites((x * TILE_SIZE, y * TILE_SIZE),image,(self.all_sprites,self.collision_sprites))
         
@@ -60,7 +67,20 @@ class Game():
             if obj.name == 'Player':
                 self.player = Player((obj.x,obj.y),self.player_frames,self.collision_sprites,self.create_bullet,self.all_sprites)
             if obj.name == 'Worm':
-                Worm((obj.x,obj.y),self.worm_frames,self.all_sprites)
+                Worm(pygame.FRect(obj.x,obj.y,obj.width,obj.height),self.worm_frames,(self.all_sprites,self.enemy_sprites))
+        
+        self.audio['music'].play(loops = -1)
+    
+    def collision(self):
+        for bullet in self.bullet_sprites:
+            sprite_collision = pygame.sprite.spritecollide(bullet,self.enemy_sprites,False, pygame.sprite.collide_mask)
+            if sprite_collision:
+                bullet.kill()
+                for sprite in sprite_collision:
+                    self.audio['impact'].play()
+                    sprite.destroy()
+        if pygame.sprite.spritecollide(self.player,self.enemy_sprites,False,pygame.sprite.collide_mask):
+            self.running = False
 
     def run(self):
         while self.running:
@@ -73,6 +93,7 @@ class Game():
             #update
             self.bee_timer.update()
             self.all_sprites.update(dt)
+            self.collision()
 
             #draw
             self.display_surface.fill(BG_COLOGR)

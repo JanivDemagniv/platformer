@@ -66,9 +66,6 @@
   <object id="3" name="Worm" x="2240" y="320" width="576" height="64"/>
   <object id="4" name="Worm" x="1536" y="128" width="384" height="64"/>
   <object id="5" name="Worm" x="960" y="384" width="384" height="64"/>
-  <object id="8" name="Bee" x="458.913" y="340.155" width="384" height="64"/>
-  <object id="9" name="Bee" x="1423.51" y="1116.84" width="384" height="64"/>
-  <object id="10" name="Bee" x="214.632" y="687.784" width="384" height="64"/>
   <object id="6" name="Worm" x="704" y="768" width="448" height="64"/>
   <object id="7" name="Worm" x="576" y="1152" width="384" height="64"/>
  </objectgroup>
