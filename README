@@ -1,0 +1,57 @@
+# Platformer Game
+
+Welcome to the Platformer Game! This is a simple platformer with one level where you can jump and shoot. If an enemy touches you, it's game over. If you hit an opponent, they vanish.
+
+## Features
+
+- Single-level platformer gameplay
+- Player abilities: jump and shoot
+- Enemies that disappear when hit
+- Game over upon enemy contact
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.x
+- Pygame library
+
+### Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/JanivDemagniv/platformer.git
+   ```
+
+2. **Navigate to the project directory:**
+
+   ```bash
+   cd platformer
+   ```
+
+### Running the Game
+
+Execute the main game script:
+
+
+python main.py
+
+
+*Note: Replace `main.py` with the actual entry-point script name if different.*
+
+## How to Play
+
+- **Move:** Use the arrow keys to move the player.
+- **Jump:** Press the up arrow to jump.
+- **Shoot:** Press the spacebar to shoot.
+- **Objective:** Avoid enemy contact and shoot enemies to make them vanish.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
